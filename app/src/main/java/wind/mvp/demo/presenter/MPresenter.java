@@ -5,7 +5,7 @@ import wind.mvp.base.Presenter;
 import wind.mvp.demo.model.MModel;
 
 /**
- * Created by pc on 2016/1/13.
+ * Created by wind on 2016/1/13.
  */
 public class MPresenter extends Presenter<MPresenter.MView, MModel> {
 

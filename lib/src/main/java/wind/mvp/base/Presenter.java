@@ -14,7 +14,6 @@ public class Presenter<V extends IView, M extends IModel> implements IPresenter<
         mMVP = mvp;
     }
 
-
     @Override
     public V getView() {
         return mMVP.getView();
@@ -50,7 +49,7 @@ public class Presenter<V extends IView, M extends IModel> implements IPresenter<
     }
 
     protected void onCreateModel() {
-        mMVP.addModel(mMVP.getModelClass());
+        addModel(mMVP.getModelClass());
     }
 
     @Override
