@@ -26,7 +26,6 @@ public class MVP<M extends IModel, V extends IView, P extends Presenter> {
 
 
     private V mView;
-    private List<Class<? extends IView>> mViewClasses = new LinkedList<>();
     private Map<Class<? extends IModel>, IModel> mModels = new HashMap<>();
     private Map<Class<? extends Presenter>, Presenter> mPresenters = new HashMap<>();
 
@@ -48,34 +47,24 @@ public class MVP<M extends IModel, V extends IView, P extends Presenter> {
 
     public void attach(V view) {
         mView = view;
-        mModelClass = ReflectUtils.getClassGenericType(view.getClass(), 0);
-        mViewClass = ReflectUtils.getClassGenericType(view.getClass(), 1);
-        mPresenterClass = ReflectUtils.getClassGenericType(view.getClass(), 2);
-        checkClasses();
+        mViewClass = ReflectUtils.getClassGenericType(view.getClass(), 0);
+        mPresenterClass = ReflectUtils.getClassGenericType(view.getClass(), 1);
         if (!mViewClass.isInstance(view)) {
             throw new IllegalArgumentException("view must implement " + mViewClass.getName());
         }
         mAttached = true;
     }
 
-    private void checkClasses(){
-        if (!IModel.class.isAssignableFrom(mModelClass)){
-            throw new RuntimeException("can't detect the type of model, have you declare the generic type of view");
+    private void checkClasses() {
+        if (!IModel.class.isAssignableFrom(mModelClass)) {
+            throw new RuntimeException("can't detect the type of model, have you declare the generic type of presenter");
         }
-        if(!IView.class.isAssignableFrom(mViewClass)){
+        if (!IView.class.isAssignableFrom(mViewClass)) {
             throw new RuntimeException("can't detect the type of view, have you declare the generic type of view");
         }
-        if(!Presenter.class.isAssignableFrom(mPresenterClass)){
+        if (!Presenter.class.isAssignableFrom(mPresenterClass)) {
             throw new RuntimeException("can't detect the type of presenter, have you declare the generic type of view");
         }
-    }
-
-
-    public void addView(Class<? extends IView> cls) {
-        if (!cls.isInstance(mView)) {
-            throw new IllegalArgumentException("view must implement " + cls.getName());
-        }
-        mViewClasses.add(cls);
     }
 
     public void addPresenter(Class<? extends Presenter> cls) {
@@ -111,7 +100,8 @@ public class MVP<M extends IModel, V extends IView, P extends Presenter> {
 
 
     public void onCreate(final Bundle savedInstanceState) {
-        mAttached = true;
+        mModelClass = ReflectUtils.getClassGenericType(getPresenter().getClass(), 1);
+        checkClasses();
         foreach(mPresenters, new Stream.Each<Presenter>() {
             @Override
             public void onEach(Presenter presenter) {
@@ -137,7 +127,7 @@ public class MVP<M extends IModel, V extends IView, P extends Presenter> {
     }
 
     public <T extends IView> T getView(Class<T> cls) {
-        if (mViewClasses.contains(cls)) {
+        if (mView != null && cls.isInstance(mView)) {
             return (T) mView;
         }
         return (T) Proxy.newProxyInstance(cls.getClassLoader(), new Class[]{cls}, new InvocationHandler() {
@@ -149,11 +139,11 @@ public class MVP<M extends IModel, V extends IView, P extends Presenter> {
     }
 
     public boolean hasView() {
-        return getView() != null;
+        return mView != null;
     }
 
     public <T extends IView> boolean hasView(Class<T> cls) {
-        return mViewClasses.contains(cls);
+        return mView != null && cls.isInstance(mView);
     }
 
     public M getModel() {

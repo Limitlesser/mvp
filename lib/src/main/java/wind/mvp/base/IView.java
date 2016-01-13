@@ -9,14 +9,8 @@ public interface IView<P extends Presenter> {
 
     <T extends Presenter> T getPresenter(Class<T> cls);
 
-    void onCreateView();
-
     void onCreatePresenter();
 
     void addPresenter(Class<? extends Presenter> cls);
-
-    void addView(Class<? extends IView> cls);
-
-    MVP getMVP();
 
 }
