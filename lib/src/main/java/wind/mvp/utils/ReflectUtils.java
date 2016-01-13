@@ -43,7 +43,7 @@ public class ReflectUtils {
         return (Class) params[index];
     }
 
-    public static <T> T newInstance(Class<T> cls, Class<?>[] parameterTypes, Object[] args) {
+    public static <T> T newInstanceByConstructor(Class<T> cls, Class<?>[] parameterTypes, Object[] args) {
         try {
             Constructor<T> constructor = cls.getConstructor(parameterTypes);
             constructor.setAccessible(true);
@@ -52,6 +52,17 @@ public class ReflectUtils {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
             e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        throw new RuntimeException("create instance failed");
+    }
+
+    public static <T> T newInstance(Class<T> cls){
+        try {
+            return cls.newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

@@ -15,7 +15,7 @@ public interface IView<P extends Presenter> {
 
     void addPresenter(Class<? extends Presenter> cls);
 
-    void addView(Class<? extends IView> cls, IView<P> view);
+    void addView(Class<? extends IView> cls);
 
     MVP getMVP();
 

@@ -1,7 +1,7 @@
 package wind.mvp.base;
 
 /**
- * Created wind pc on 2016/1/12.
+ * Created by wind on 2016/1/12.
  */
 public interface IPresenter<V extends IView, M extends IModel> {
 

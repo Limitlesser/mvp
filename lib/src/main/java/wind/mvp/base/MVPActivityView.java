@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 /**
  * Created by wind on 2016/1/12.
  */
-public class MVPActivityView<M extends IModel<P>, V extends IView<P>, P extends Presenter<V, M>> extends AppCompatActivity implements IView<P> {
+public class MVPActivityView<M extends IModel, V extends IView<P>, P extends Presenter<V, M>> extends AppCompatActivity implements IView<P> {
 
     protected MVP<M, V, P> mMVP;
 
@@ -16,6 +16,7 @@ public class MVPActivityView<M extends IModel<P>, V extends IView<P>, P extends 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMVP = new MVP<>();
+        mMVP.attach((V) this);
         onCreateView();
         onCreatePresenter();
         mMVP.onCreate(savedInstanceState);
@@ -33,7 +34,7 @@ public class MVPActivityView<M extends IModel<P>, V extends IView<P>, P extends 
 
     @Override
     public void onCreateView() {
-        addView(mMVP.getViewClass(), this);
+        addView(mMVP.getViewClass());
     }
 
     @Override
@@ -47,8 +48,8 @@ public class MVPActivityView<M extends IModel<P>, V extends IView<P>, P extends 
     }
 
     @Override
-    public void addView(Class<? extends IView> cls, IView<P> view) {
-        mMVP.addView(cls, view);
+    public void addView(Class<? extends IView> cls) {
+        mMVP.addView(cls);
     }
 
     @Override

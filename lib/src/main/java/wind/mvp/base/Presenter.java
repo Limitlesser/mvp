@@ -10,9 +10,10 @@ public class Presenter<V extends IView, M extends IModel> implements IPresenter<
 
     protected MVP<M, V, ? extends Presenter> mMVP;
 
-    public Presenter(MVP<M, V, ? extends Presenter> mvp) {
+    protected void onInit(MVP<M, V, ? extends Presenter> mvp) {
         mMVP = mvp;
     }
+
 
     @Override
     public V getView() {
